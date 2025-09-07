@@ -4,10 +4,10 @@ import mysql.connector
 app = Flask(__name__)
 
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="adan123",
-    database="product_db"
+    host="mysql-nexify.alwaysdata.net",
+    user="nexify",
+    password="@adan123",
+    database="nexify_flask_app"
 )
 cursor = db.cursor(dictionary=True)
 
