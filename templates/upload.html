@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+  <title>Upload Image</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .tables {
+  width: 100%;
+  margin: 20px auto;
+  padding: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.tables table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tables thead {
+  background: #4CAF50; /* green header */
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+.tables th, 
+.tables td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+   border: 1px solid #ccc;
+}
+
+.tables tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.tables td {
+  color: #333;
+}
+
+/* delete button */
+.btn-delete {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #e74c3c;
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 5px;
+  transition: 0.3s ease;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+/* align text in header */
+.tables thead th {
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* round table corners */
+.tables table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+/* Buttons General */
+.btn-edit,
+.btn-delete {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 2px;
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 5px;
+  transition: 0.3s ease;
+}
+
+/* Edit button */
+.btn-edit {
+  background: #3498db; /* blue */
+}
+
+.btn-edit:hover {
+  background: #217dbb;
+}
+
+/* Delete button */
+.btn-delete {
+  background: #e74c3c; /* red */
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>ENTER PRODUCT DETAILS</h1>
+  <form method="POST">
+    <input type="text" name="name" placeholder="Enter Product Name" required>
+
+    <input type="number" id="price" name="price" placeholder="Enter Price" step="0.01" required>
+
+    <input type="number" id="oldprice" name="oldprice" placeholder="Enter Old Price" step="0.01" required>
+
+    <input type="number" id="discount" name="discount" placeholder="Discount (%)" min="0" max="100" readonly required>
+
+    <input type="text" name="image_url" placeholder="Enter Image URL" required>
+
+    <input type="number" name="rating" placeholder="Enter Rating" step="0.01" required>
+
+    <button type="submit">Save Product</button>
+  </form>
+
+
+  <h1>Saved Products </h1>
+
+  <div class="tables">
+      <table>
+           <thead>
+             <tr>
+               <th>ID</th>
+               <th>Name</th>
+               <th>Price</th>
+               <th>Old Price</th>
+               <th>Discount</th>
+               <th>Rating</th>
+               <th>image_url</th>
+               <th>Action</th>
+             </tr>
+           </thead>
+           <tbody>
+            {% for p in products %}
+               <tr>
+                 <td>{{ p.id }}</td>
+                 <td>{{ p.name }}</td>
+                 <td>{{ p.price }}</td>
+                 <td>{{ p.oldprice }}</td>
+                 <td>{{ p.discount }}%</td>
+                 <td>{{ p.rating }}</td>
+                 <td>{{ p.img_url }}</td>
+                 <td>
+                   <a href="/edit/{{ p.id }}" class="btn-edit">Edit</a>
+                  <a href="/delete/{{ p.id }}" class="btn-delete" onclick="return confirm('Delete this product?')">Delete</a>
+                </td>
+               </tr>
+            {% endfor %}
+           </tbody>
+       </table>
+  </div>
+
+  <script>
+    function calculateDiscount() {
+      let price = parseFloat(document.getElementById("price").value);
+      let oldprice = parseFloat(document.getElementById("oldprice").value);
+
+      if (!isNaN(price) && !isNaN(oldprice) && oldprice > 0) {
+        let discount = ((oldprice - price) / oldprice) * 100;
+        document.getElementById("discount").value = Math.floor(discount); // round down
+      } else {
+        document.getElementById("discount").value = 0;
+      }
+    }
+
+    document.getElementById("price").addEventListener("input", calculateDiscount);
+    document.getElementById("oldprice").addEventListener("input", calculateDiscount);
+  </script>
+
+</body>
+</html>

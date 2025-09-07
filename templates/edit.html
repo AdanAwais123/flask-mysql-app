@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <title>Edit Product</title>
+</head>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+</style>
+<body>
+  <h1>Edit Product</h1>
+  <form method="POST">
+    <input type="text" name="name" value="{{ product.name }}" required>
+    <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
+    <input type="number" id="oldprice" name="oldprice" step="0.01" value="{{ product.oldprice }}" required>
+    <input type="number" name="discount" id="discount" min="0" max="100" value="{{ product.discount }}" required>
+    <input type="text" name="image_url" value="{{ product.img_url }}" required>
+    <input type="number" name="rating" step="0.01" value="{{ product.rating }}" required>
+    <button type="submit">Update Product</button>
+  </form>
+
+
+
+  <script>
+    function calculateDiscount(){
+    let price = document.getElementById("price").value;
+    let oldprice = document.getElementById("oldprice").value;
+
+    if ( !isNaN(price) && !isNaN(oldprice) && oldprice > 0){
+      let discount = ((oldprice - price) / oldprice) * 100 ;
+      document.getElementById("discount").value = Math.floor(discount);
+    }
+    else {
+        document.getElementById("discount").value = 0;
+      }
+    }
+
+    document.getElementById("price").addEventListener("input", calculateDiscount)
+    document.getElementById("oldprice").addEventListener("input", calculateDiscount)
+  </script>
+</body>
+</html>
